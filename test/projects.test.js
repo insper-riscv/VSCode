@@ -16,6 +16,8 @@ test("Rust creation opens a complete project and initialization preserves user c
   const commands = new Map();
   const opened = [];
   const errors = [];
+  let projectName = "new-rust";
+  let platformId = "periph-de10-lite";
   const event = () => ({ dispose() {} });
   const mock = {
     workspace: {
@@ -28,7 +30,8 @@ test("Rust creation opens a complete project and initialization preserves user c
     window: {
       onDidChangeActiveTextEditor: event,
       showOpenDialog: async () => [{ fsPath: root, scheme: "vscode-remote", authority: "ssh-remote+lab" }],
-      showInputBox: async () => "new-rust",
+      showQuickPick: async (choices) => choices.find((choice) => choice.id === platformId),
+      showInputBox: async () => projectName,
       showErrorMessage: async (message) => errors.push(message),
       showInformationMessage: async () => {}
     },
@@ -59,6 +62,7 @@ test("Rust creation opens a complete project and initialization preserves user c
       assert.ok(fs.existsSync(path.join(project, name)), name);
     }
     assert.match(fs.readFileSync(path.join(project, "rv32.toml"), "utf8"), /language = "rust"/);
+    assert.match(fs.readFileSync(path.join(project, "rv32.toml"), "utf8"), /platform = "periph-de10-lite"/);
     assert.equal(fs.existsSync(path.join(project, "src/main.c")), false);
     assert.match(fs.readFileSync(path.join(project, "rv32.toml"), "utf8"), /generate_drivers = true/);
     assert.match(fs.readFileSync(path.join(project, "Cargo.toml"), "utf8"), /rv32-runtime/);
@@ -78,6 +82,19 @@ test("Rust creation opens a complete project and initialization preserves user c
     await commands.get("rv32.initializeRustWorkspace")();
     assert.equal(fs.readFileSync(path.join(existing, "src/main.rs"), "utf8"), "// user source\n");
     assert.ok(fs.existsSync(path.join(existing, ".devcontainer/devcontainer.json")));
+
+    projectName = "new-c";
+    platformId = "modular";
+    await commands.get("rv32.createCProject")();
+    const cProject = path.join(root, projectName);
+    assert.match(fs.readFileSync(path.join(cProject, "rv32.toml"), "utf8"), /platform = "modular"/);
+    assert.ok(fs.existsSync(path.join(cProject, "src/main.c")));
+    assert.ok(fs.existsSync(path.join(cProject, ".devcontainer/compose.yaml")));
+
+    projectName = "cancelled-rust";
+    platformId = "cancel";
+    await commands.get("rv32.createRustProject")();
+    assert.equal(fs.existsSync(path.join(root, projectName)), false);
   } finally {
     fs.rmSync(root, { recursive: true, force: true });
   }

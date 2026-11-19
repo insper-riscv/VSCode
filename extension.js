@@ -1,6 +1,7 @@
 "use strict";
 
 const path = require("node:path");
+const fs = require("node:fs");
 const vscode = require("vscode");
 const core = require("./src/core");
 
@@ -167,7 +168,15 @@ async function createProject(context, language) {
     await vscode.window.showErrorMessage(`Destination is not empty: ${destination}`);
     return;
   }
+  const platform = await vscode.window.showQuickPick(core.PLATFORM_CHOICES, {
+    title: "RV32 project platform",
+    placeHolder: "Select the hardware map used to generate C/Rust drivers"
+  });
+  if (!platform) return;
+
   core.copyTree(path.join(context.extensionPath, "templates", language), destination);
+  const manifest = path.join(destination, "rv32.toml");
+  fs.writeFileSync(manifest, core.configurePlatform(fs.readFileSync(manifest, "utf8"), platform.id));
 
   const openNewWindow = vscode.workspace
     .getConfiguration("rv32")

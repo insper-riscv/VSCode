@@ -1,6 +1,6 @@
 # C and Rust language servers
 
-Live 0.10.1 recommends clangd for C and rust-analyzer for Rust. Use it with the
+VSCode 0.10.2 recommends clangd for C and rust-analyzer for Rust. Use it with the
 matching SDK changes; updating only the VSIX does not install native tools in
 an already running container.
 

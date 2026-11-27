@@ -7,7 +7,7 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/insper-riscv/Live"
+    "url": "https://github.com/insper-riscv/VSCode"
   },
   "engines": {
     "vscode": "^1.90.0"
@@ -204,8 +204,8 @@
   "overrides": {
     "minimatch": "^11.0.1"
   },
-  "homepage": "https://github.com/insper-riscv/Live#readme",
+  "homepage": "https://github.com/insper-riscv/VSCode#readme",
   "bugs": {
-    "url": "https://github.com/insper-riscv/Live/issues"
+    "url": "https://github.com/insper-riscv/VSCode/issues"
   }
 }

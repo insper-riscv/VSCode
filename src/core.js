@@ -77,7 +77,35 @@ function validProjectName(value) {
   return /^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(value || "");
 }
 
+const PLATFORM_CHOICES = [
+  { label: "Internal memory", id: "internal-mem", description: "Default simulation platform" },
+  { label: "Modular SoC", id: "modular", description: "Simulation with GPIO, timers and interrupt controllers" },
+  { label: "DE0-CV (legacy)", id: "de0-cv", description: "Existing FPGA platform" },
+  ...["de0-cv", "de0-nano", "de0-nano-soc", "de10-lite", "de10-nano", "de2-115", "mkr-vidor-4000"].map(
+    (board) => ({ label: board.toUpperCase(), id: `periph-${board}`, description: "Physical peripheral board; device simulation unavailable" })
+  )
+];
+
+function configurePlatform(manifest, platform) {
+  if (!PLATFORM_CHOICES.some((choice) => choice.id === platform)) {
+    throw new Error(`Unknown RV32 platform: ${platform}`);
+  }
+  const lines = manifest.split("\n");
+  const start = lines.findIndex((line) => line.trim() === "[project]");
+  if (start < 0) throw new Error("Missing [project] table");
+  let end = start + 1;
+  while (end < lines.length && !/^\s*\[/.test(lines[end])) end++;
+  const existing = lines.findIndex((line, index) =>
+    index > start && index < end && /^\s*platform\s*=/.test(line));
+  const value = `platform = "${platform}"`;
+  if (existing >= 0) lines[existing] = value;
+  else lines.splice(start + 1, 0, value);
+  return lines.join("\n");
+}
+
 module.exports = {
+  PLATFORM_CHOICES,
+  configurePlatform,
   copyTree,
   directoryIsEmpty,
   expandHome,

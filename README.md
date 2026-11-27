@@ -195,3 +195,20 @@ then keeps running while VS Code uses ubuntu. This does not require sudo or a
 Dockerfile build. Rust setup/build checks these prerequisites before Cargo.
 Existing containers need their matching infrastructure refreshed/rebuilt once;
 upgrading the extension requires Developer: Reload Window.
+
+
+## Peripheral board projects (0.10.0)
+
+Creating a C or Rust project now asks for its platform. The seven canonical
+`periph-<board>` maps are available alongside `internal-mem`, `modular` and the
+legacy `de0-cv`. Use the matching SDK 0.10.0 branch with its updated Peripherals
+submodule; this VSIX alone does not install processor sources.
+
+`RV32: Refresh Peripheral Drivers` reads the selected platform's `kind`, device
+variant, addresses and generics. It vendors matching C/Rust drivers, adds safe
+Rust Cargo dependencies, and creates independent driver example projects. The
+three editor buttons continue to apply to both C and Rust. Physical peripheral
+board maps support build/FPGA actions; a complete external-device simulation is
+not yet available for those maps. Use `modular` for the existing SoC simulation.
+
+Language server setup and validation: [C and Rust language servers](docs/language-servers.md).

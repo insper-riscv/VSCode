@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.10.2
+
+- Update C/Rust project templates to the current immutable development image.
+- Configure clangd and the matching rust-analyzer through the current SDK.
+- Select canonical peripheral board maps when creating C or Rust projects.
+- Refresh the bundled installation VSIX and use the renamed VSCode repository.
+
 ## 0.9.1
 
 - Keep RV32 commands and editor buttons in the workspace extension host for C/Rust remote projects.

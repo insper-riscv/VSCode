@@ -125,3 +125,14 @@ test("nested driver examples resolve to their own project inside the workspace",
   assert.equal(core.projectDirectory(path.join(root, "src/main.c"), root), root);
   assert.equal(core.projectDirectory("/outside/main.c", root), root);
 });
+
+
+test("platform selection generates exactly one project platform", () => {
+  const { configurePlatform } = require("../src/core");
+  const text = configurePlatform('[project]\nlanguage = "rust"\n', "periph-de10-lite");
+  assert.match(text, /platform = "periph-de10-lite"/);
+  assert.throws(() => configurePlatform("[project]", "../unexpected"));
+  assert.equal(configurePlatform('[project]\nplatform = "modular"\n[other]\nplatform = "keep"\n', "internal-mem"),
+    '[project]\nplatform = "internal-mem"\n[other]\nplatform = "keep"\n');
+  assert.throws(() => configurePlatform("[other]", "internal-mem"));
+});

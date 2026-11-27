@@ -2,7 +2,7 @@
   "name": "rv32-development",
   "displayName": "Insper RISC-V Live",
   "description": "Create, simulate, and program C and Rust applications for the Insper RV32 processor.",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "publisher": "insper-riscv",
   "license": "Apache-2.0",
   "repository": {
@@ -59,7 +59,8 @@
   "extensionPack": [
     "ms-vscode.cpptools",
     "ms-vscode-remote.remote-containers",
-    "rust-lang.rust-analyzer"
+    "rust-lang.rust-analyzer",
+    "llvm-vs-code-extensions.vscode-clangd"
   ],
   "contributes": {
     "commands": [
@@ -195,7 +196,7 @@
   "scripts": {
     "check": "node --check extension.js && node --check src/core.js",
     "test": "npm run check && node --test",
-    "package": "node -e \"require('fs').mkdirSync('dist',{recursive:true})\" && vsce package --no-dependencies --follow-symlinks --out dist/rv32-development-0.10.0.vsix"
+    "package": "node -e \"require('fs').mkdirSync('dist',{recursive:true})\" && vsce package --no-dependencies --follow-symlinks --out dist/rv32-development-0.10.1.vsix"
   },
   "devDependencies": {
     "@vscode/vsce": "4.0.0"

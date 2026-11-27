@@ -210,3 +210,5 @@ Rust Cargo dependencies, and creates independent driver example projects. The
 three editor buttons continue to apply to both C and Rust. Physical peripheral
 board maps support build/FPGA actions; a complete external-device simulation is
 not yet available for those maps. Use `modular` for the existing SoC simulation.
+
+Language server setup and validation: [C and Rust language servers](docs/language-servers.md).
